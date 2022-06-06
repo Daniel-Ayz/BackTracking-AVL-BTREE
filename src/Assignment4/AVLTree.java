@@ -11,6 +11,8 @@ public class AVLTree implements Iterable<Integer> {
     	public int height = 0;
     	public int value;
 
+        public int size=1;
+
     	public Node(int val) {
             this.value = val;
         }
@@ -20,6 +22,12 @@ public class AVLTree implements Iterable<Integer> {
             int rightHeight = (right == null) ? -1 : right.height;
 
             height = Math.max(leftHeight, rightHeight) + 1;
+        }
+
+        public void updateSize(){
+            int leftSize= left==null ? 0 : left.size;
+            int rightSize= right==null ? 0 : right.size;
+            size = leftSize + rightSize + 1;
         }
 
         public int getBalanceFactor() {
@@ -53,7 +61,7 @@ public class AVLTree implements Iterable<Integer> {
 	    // Perform regular BST insertion
         if (node == null) {
         	Node insertedNode = new Node(value);
-//            backtrack.push(ImbalanceCases.NO_IMBALANCE);
+            backtrack.push(ImbalanceCases.NO_IMBALANCE);
             return insertedNode;
         }
 
@@ -67,6 +75,7 @@ public class AVLTree implements Iterable<Integer> {
         }
             
         node.updateHeight();
+        node.updateSize();
 
         /* 
          * Check For Imbalance, and fix according to the AVL-Tree Definition
@@ -121,6 +130,9 @@ public class AVLTree implements Iterable<Integer> {
         y.updateHeight();
         x.updateHeight();
 
+        y.updateSize();
+        x.updateSize();
+
         // Return new root
         return x;
     }
@@ -143,6 +155,9 @@ public class AVLTree implements Iterable<Integer> {
         
         x.updateHeight();
         y.updateHeight();
+
+        x.updateSize();
+        y.updateSize();
 
         // Return new root
         return y;

@@ -52,6 +52,7 @@ public class BacktrackingAVL extends AVLTree {
             }
 
             current.updateHeight();
+            current.updateSize();
             return current;
         }
 
@@ -65,14 +66,33 @@ public class BacktrackingAVL extends AVLTree {
     }
     
     public int Select(int index) {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+        return Select(root,index);
     }
-    
+
+    private int Select(Node node,int index) {
+        if(node==null)
+            return -1;
+        int curr_rank = node.left==null ? 1 : node.left.size + 1;
+        if (curr_rank == index)
+            return node.value;
+        else if (index<curr_rank)
+            return Select(node.left, index);
+        else
+            return Select(node.right, index - curr_rank);
+    }
+
     public int Rank(int value) {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+        return Rank(root,value);
+    }
+
+    private int Rank(Node node,int val){
+        if(node==null)
+            return 0;
+        if (node.value == val)
+            return node.left==null ? 0 : node.left.size ;
+        else if( node.value > val)
+            return Rank(node.left, val);
+        else
+            return Rank(node.right, val) + (node.left==null ? 0 : node.left.size) + 1;
     }
 }

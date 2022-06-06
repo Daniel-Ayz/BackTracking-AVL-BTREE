@@ -2,6 +2,37 @@ package Assignment4;
 
 public class Main {
     public static void main(String[] args){
+        Test2();
+        //{451, 303, -152, -177, 194}
+    }
+
+    public static void Test2(){
+        BacktrackingAVL tree=new BacktrackingAVL();
+        tree.insert(451);
+        tree.insert(303);
+        tree.insert(-152);
+        tree.insert(-177);
+        tree.insert(194);
+        System.out.println("==================inserted===================");
+        tree.printTree();
+        System.out.println("==================backtrack 194==============");
+        tree.Backtrack();
+        tree.printTree();
+        System.out.println("==================backtrack -177==============");
+        tree.Backtrack();
+        tree.printTree();
+        System.out.println("==================backtrack -152==============");
+        tree.Backtrack();
+        tree.printTree();
+        System.out.println("==================backtrack 303==============");
+        tree.Backtrack();
+        tree.printTree();
+        System.out.println("==================backtrack 451==============");
+        tree.Backtrack();
+        tree.printTree();
+    }
+
+    public static void Test1(){
         BacktrackingAVL tree=new BacktrackingAVL();
         tree.insert(2);
         tree.insert(1);
@@ -57,5 +88,11 @@ public class Main {
         System.out.println(n5.right==null);
         System.out.println(n1.left==null);
         System.out.println(n1.right==null);
+
+        System.out.println(n1.height==0);
+        System.out.println(n2.height==2);
+        System.out.println(n3.height==0);
+        System.out.println(n4.height==1);
+        System.out.println(n5.height==0);
     }
 }
