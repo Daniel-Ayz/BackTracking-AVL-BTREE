@@ -41,8 +41,8 @@ public class AVLTree implements Iterable<Integer> {
     protected Node root;
 
     //You may add fields here.
-    protected Stack<ImbalanceCases> backtrack=new Stack<>();
-    protected Stack<Integer> inserted=new Stack<>();
+    protected Deque<ImbalanceCases> backtrack=new ArrayDeque<>();
+    protected Deque<Integer> inserted=new ArrayDeque<>();
 
     
     public AVLTree() {
