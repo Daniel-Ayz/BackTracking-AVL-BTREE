@@ -49,13 +49,19 @@ public class BTree<T extends Comparable<T>> {
         if (root == null) {
             root = new Node<T>(null, maxDegree);
             root.addKey(value);
-        } else {
+            backtrack.addFirst(BTreeActionType.NONE);
+        }
+        else {
             Node<T> currentNode = root;
             boolean wasAdded = false;
             while (currentNode != null && !wasAdded) {
             	// If the node has 2t-1 keys then split it
                 if (currentNode.getNumberOfKeys() == maxDegree - 1) {
-                	split(currentNode);
+                    int numberOfKeys = currentNode.getNumberOfKeys();
+                    int medianIndex = numberOfKeys / 2;
+                    T medianValue = currentNode.getKey(medianIndex);
+                    split(currentNode);
+                    insertedValues.addFirst(medianValue);
                 	backtrack.addFirst(BTreeActionType.SPLIT);
 
                 	// Return to the parent and descend to the needed node
@@ -63,8 +69,9 @@ public class BTree<T extends Comparable<T>> {
                     int idx = currentNode.getValuePosition(value);
                     currentNode = currentNode.getChild(idx);
                 }
-                else
-                    backtrack.addFirst(BTreeActionType.NONE);
+
+                backtrack.addFirst(BTreeActionType.NONE);
+
                 
                 // Descend the tree and add the key to a leaf
                 if (currentNode.isLeaf()) {
@@ -76,9 +83,8 @@ public class BTree<T extends Comparable<T>> {
                 }
             }
         }
-        insertedValues.addFirst(value);
         ++size;
-        
+        insertedValues.addFirst(value);
     }
     
     /**
@@ -106,13 +112,43 @@ public class BTree<T extends Comparable<T>> {
             parent = node.parent;
             parent.removeChild(node);
         }
-        
+
         // Move the median value up to the parent
         parent.addKey(medianValue);
         parent.addChild(left);
         parent.addChild(right);
 
         return medianValue;
+    }
+
+    protected Node<T> merge(Node<T> node, int index) {
+        T medianValue = node.getKey(index);
+        Node<T> merged = new Node<>(node.parent, maxDegree);
+
+        Node<T> left = node.children[index];
+        Node<T> right = node.children[index+1];
+
+        for (int i = 0; i < left.numOfKeys; i++){
+            merged.addKey(left.getKey(i));
+        }
+        merged.addKey(medianValue);
+        for (int i = 0; i < right.numOfKeys; i++){
+            merged.addKey(right.getKey(i));
+        }
+
+        for (int i = 0; i < left.numOfChildren; i++){
+            merged.addChild(left.getChild(i));
+        }
+
+        for (int i = 0; i < right.numOfChildren; i++){
+            merged.addChild(right.getChild(i));
+        }
+
+        node.removeChild(left);
+        node.removeChild(right);
+        node.removeKey(medianValue);
+
+        return merged;
     }
     
     /***

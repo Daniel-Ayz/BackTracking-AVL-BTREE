@@ -17,30 +17,45 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 	//You are to implement the function Backtrack.
 	public void Backtrack() {
 		if(!insertedValues.isEmpty()) {
-			T value=insertedValues.getFirst();
-			boolean found=false;
-			while(!backtrack.isEmpty() && !found){
-				Node current=root;
-				BTreeActionType actionType=backtrack.getLast();
-				switch (actionType){
-					case NONE -> {
-						if(current.isLeaf()){
-							current.removeKey(value);
-						}
-						else{
-							current=getNextNode(current,value);
-						}
-					}
-					case SPLIT -> {
+			T value=insertedValues.pop();
+			recursiveBacktrack(root, value);
+			if (root.numOfKeys == 0)
+				root = null;
+		}
+    }
 
+	private Node recursiveBacktrack(Node<T> current, T value){
+		if (current.isLeaf()) {
+			current.removeKey(value);
+			backtrack.pop();
+		}
+		else {
+			current = recursiveBacktrack(getNextNode(current, value), value);
+			if (current != null) {
+				BTreeActionType actionType = backtrack.pop();
+				if (actionType == BTreeActionType.SPLIT) {
+					T medianValue = insertedValues.pop();
+					int medianIndex = current.indexOf(medianValue);
+					Node<T> mergedNode = merge(current, medianIndex);
+					if (current.numOfKeys == 0) {
+						mergedNode.parent = current.parent;
+
+						if (current == root)
+							root = mergedNode;
+						else
+							mergedNode.parent.addChild(mergedNode);
+
+						current = mergedNode;
+					} else {
+						mergedNode.parent = current;
+						current.addChild(mergedNode);
+						backtrack.pop();
 					}
 				}
 			}
 		}
-    }
 
-	public void merge(Node current){
-
+		return current.parent;
 	}
 
 	public Node getNextNode(Node current, T value){

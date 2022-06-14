@@ -32,20 +32,23 @@ public class BTree_BackTracking_Tests {
 
     public static void main(String[] args) {
 
-        boolean Read_The_Instructions = false;
+        boolean Read_The_Instructions = true;
         if(Read_The_Instructions == false) throw new RuntimeException("READ THE INSTRUCTIONS FIRST!");
 
-
+        //BtreeDebugging(new int[]{211, 250, -326, 71, -55});
         // main tests
         mainTests();
 
         /**   example call from end of failed instance presentation  **/
-        //BtreeDebugging(new int[]{-432, 434, -102, -218, 251});
+        //BtreeDebugging(new int[]{356, 92, 294, -170, 194, 137, -160, -351, 197, -404, -319, -448, -114, -430, 420});
+        //BtreeDebugging(new int[]{-295, 484, -180, 257, -319});
+       // BtreeDebugging(new int[]{353, -419, -394, -380, -362, 418, 378, 76, -498, -87, 405, -301, 344, -432, -162});
     }
     public static void BtreeDebugging(int[] nums){
 
         /** You can add code here for debugging
          * The nums array contains the inserted numbers by the order of indexes **/
+
 
         BacktrackingBTree<Integer> tree = new BacktrackingBTree<>();
         for (int i = 0; i < nums.length; i++) {
